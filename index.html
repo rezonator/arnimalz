@@ -13,7 +13,7 @@
 <body>
     <!-- Starting an immersive WebXR session requires user interaction.
    We start this one with a simple button. -->
-    <button onclick="activateXR()">Start AR (v4)</button>
+    <button onclick="activateXR()">Start AR (v5)</button>
     <script>
         async function activateXR() {
             try {
@@ -29,7 +29,7 @@
                     // Initialize a WebXR session using "immersive-ar".
                     const xrSession = await navigator.xr.requestSession("immersive-ar", { requiredFeatures: ['hit-test'] });
                     xrSession.updateRenderState({
-                        baseLayer: new XRWebGLLayer(session, gl)
+                        baseLayer: new XRWebGLLayer(xrSession, gl)
                     });
 
                     // setup the three.js scene
