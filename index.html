@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>ARnimalZ</title>
+    <title>ARnimalZ v.1</title>
     <!-- three.js -->
     <script src="https://unpkg.com/three@0.126.0/build/three.js"></script>
 </head>
@@ -13,7 +13,7 @@
 <body>
     <!-- Starting an immersive WebXR session requires user interaction.
    We start this one with a simple button. -->
-    <button onclick="activateXR()">Start AR</button>
+    <button onclick="activateXR()">Start AR (v1)</button>
     <script>
         async function activateXR() {
             try {
@@ -53,7 +53,6 @@
                         const pose = result.getPose(refSpace);
                         // Create a 3D object at the pose...
                     }
-
                 }
                 else {
                     console.log("immersive-ar sessions are not supported");
@@ -61,7 +60,7 @@
                 }
             }
             catch (e) {
-                alert("Error while creating rendering context", e);
+                alert(`Error while creating rendering context : "${ e }"`);
                 console.log(e);
             }
         }
