@@ -13,7 +13,7 @@
 <body>
     <!-- Starting an immersive WebXR session requires user interaction.
    We start this one with a simple button. -->
-    <button onclick="activateXR()">Start AR (v7)</button>
+    <button onclick="activateXR()">Start AR (v8)</button>
     <script>
         async function activateXR() {
             try {
@@ -39,12 +39,10 @@
                     renderer.xr.enabled = true;
 
                     // event listeners
-                    session.addEventListener("end", (event) => {
-                        xrSession.removeEventListener("end", onXRSessionEnded);
-                        xrSession.removeEventListener("select", onXRSelect);
-                        xrSession = null;
+                    xrSession.addEventListener("end", (event) => {
+                       // END
                     });
-                    session.addEventListener("end", (event) => {
+                    xrSession.addEventListener("end", (event) => {
                         // Selected.
                     });
 
