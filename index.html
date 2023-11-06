@@ -13,7 +13,7 @@
 <body>
     <!-- Starting an immersive WebXR session requires user interaction.
    We start this one with a simple button. -->
-    <button onclick="activateXR()">Start AR (v6)</button>
+    <button onclick="activateXR()">Start AR (v7)</button>
     <script>
         async function activateXR() {
             try {
@@ -39,8 +39,15 @@
                     renderer.xr.enabled = true;
 
                     // event listeners
-                    xrSession.addEventListener("end", onXRSessionEnded);
-                    xrSession.addEventListener("select", onXRSelect);
+                    session.addEventListener("end", (event) => {
+                        xrSession.removeEventListener("end", onXRSessionEnded);
+                        xrSession.removeEventListener("select", onXRSelect);
+                        xrSession = null;
+                    });
+                    session.addEventListener("end", (event) => {
+                        // Selected.
+                    });
+
 
                     // create a ref space in the real world.
                     const refSpace = await xrSession.requestReferenceSpace("local");
@@ -54,16 +61,6 @@
                         const pose = result.getPose(refSpace);
                         // Create a 3D object at the pose...
                     }
-
-                    const onXRSessionEnded = (event) => {
-                        xrSession.removeEventListener("end", onXRSessionEnded);
-                        xrSession.removeEventListener("select", onXRSelect);
-                        xrSession = null;
-                    };
-
-                    const onXRSelect = (event) => {
-                        // Handle select events here.
-                    };
                 }
                 else {
                     console.log("immersive-ar sessions are not supported");
