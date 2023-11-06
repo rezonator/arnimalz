@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>ARnimalZ v.1</title>
+    <!-- three.js -->
+    <script src="https://unpkg.com/three@0.126.0/build/three.js"></script>
+</head>
+
+<body>
+    <!-- Starting an immersive WebXR session requires user interaction.
+   We start this one with a simple button. -->
+    <button onclick="activateXR()">Start AR (v2)</button>
+    <script>
+        async function activateXR() {
+            try {
+                if (await navigator.xr.isSessionSupported("immersive-ar")) {
+
+                    // Add a canvas element and initialize a WebGL context that is compatible with WebXR.
+                    const canvas = document.createElement("canvas");
+                    document.body.appendChild(canvas);
+                    const gl = canvas.getContext("webgl", { xrCompatible: true });
+
+                    // Initialize a WebXR session
+                    // to conduct hit tests and overlays
+                    const xrSession = await navigator.xr.requestSession("immersive-ar", {
+                        requiredFeatures: ["hit-test", "dom-overlay"],
+                        domOverlay: { root: document.body }
+                    });
+
+                    // setup the three.js scene
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+                    const renderer = new THREE.WebGLRenderer({ canvas: canvas, context: gl });
+                    renderer.xr.enabled = true;
+
+                    // event listeners
+                    xrSession.addEventListener("end", onXRSessionEnded);
+                    xrSession.addEventListener("select", onXRSelect);
+
+                    alert("Basic setup OK!");
+
+                    // create a ref space in the real world.
+                    const refSpace = await xrSession.requestReferenceSpace("local");
+                    // Hit test source is used to ray trace.
+                    const hitTestSource = await xrSession.requestHitTestSource({
+                        space: refSpace,
+                        offsetRay: new XRRay()
+                    });
+                    const hitTestResults = await xrSession.requestHitTest(hitTestSource, [new XRRay()]);
+                    for (const result of hitTestResults) {
+                        const pose = result.getPose(refSpace);
+                        // Create a 3D object at the pose...
+                    }
+
+                    alert("Hit testing setup OK!");
+                }
+                else {
+                    console.log("immersive-ar sessions are not supported");
+                    alert("immersive-ar sessions are not supported");
+                }
+            }
+            catch (e) {
+                alert(`Error while creating rendering context : "${ e }"`);
+                console.log(e);
+            }
+        }
+    </script>
+</body>
+
+</html>
